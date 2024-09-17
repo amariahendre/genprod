@@ -62,21 +62,20 @@ def main():
         Generarea se face utilizând modelul OpenAI GPT-4.
 
         ### Instrucțiuni de utilizare:
-        1. Introduceți cheia dvs. OpenAI API.
-        2. Încărcați o imagine a produsului pentru care doriți să generați o descriere.
-        3. Completați detaliile suplimentare despre produs (opțional) pentru a îmbunătăți descrierea generată.
-        4. Apăsați butonul **Generează** pentru a primi un nume și o descriere pentru produsul încărcat.
+        1. Încărcați o imagine a produsului pentru care doriți să generați o descriere.
+        2. Completați detaliile suplimentare despre produs (opțional) pentru a îmbunătăți descrierea generată.
+        3. Apăsați butonul **Generează** pentru a primi un nume și o descriere pentru produsul încărcat.
         """)
 
-    # Introducerea cheii API și detaliilor produsului pe prima pagină
+    # Introducerea detaliilor produsului pe prima pagină
     st.subheader("Introduceți datele produsului")
 
-    # Input pentru cheia API
-    api_key = st.text_input("Introduceți cheia dvs. OpenAI API:", type="password")
+    # Preluarea cheii API din secrets.toml
+    api_key = get_api_key()
 
     # Input pentru informații suplimentare
     user_input = st.text_area("Introduceți informații suplimentare despre produs:", 
-                               placeholder="Ex: piata tinta, materialul produsului, utilizarea etc.")
+                               placeholder="Ex: piața țintă, materialul produsului, utilizarea etc.")
 
     # Widget pentru încărcarea imaginii
     uploaded_image = st.file_uploader("Alegeți o imagine...", type=["jpg", "jpeg", "png"])
@@ -89,13 +88,13 @@ def main():
         st.image(uploaded_image, caption="Imagine încărcată", use_column_width=True)
 
     # Dacă se apasă butonul de generare
-    if generate_button and uploaded_image and api_key:
+    if generate_button and uploaded_image:
         # Codificarea imaginii
         base64_image = encode_image(uploaded_image)
 
         # Crearea promptului folosind șablonul oferit
         prompt = f"""
-        Esti expert în marketing. Generează nume și descriere pentru acest produs. 
+        Ești expert în marketing. Generează nume și descriere pentru acest produs. 
         Ia în considerare și următoarele informații: {user_input}.
         
         Exemplu:
@@ -117,7 +116,7 @@ def main():
         else:
             st.error("Eroare: Nu s-a putut obține analiza de la API.")
     elif generate_button:
-        st.warning("Vă rugăm să încărcați o imagine și să introduceți cheia API.")
+        st.warning("Vă rugăm să încărcați o imagine.")
 
 if __name__ == "__main__":
     main()
