@@ -2,6 +2,10 @@ import streamlit as st
 import base64
 import requests
 
+# Citirea cheii API din secrets.toml stocat în Streamlit Cloud
+def get_api_key():
+    return st.secrets["openai"]["api_key"]
+
 # Function to encode the image
 def encode_image(image_file):
     return base64.b64encode(image_file.read()).decode('utf-8')
